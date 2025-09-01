@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Página cargada. Iniciando la lógica del tablero.');
-
-    // ... (el resto de las referencias a elementos no cambia)
+    // Referencias a los contenedores de las tarjetas
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');
     const colClientes = document.getElementById('col-clientes');
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
-    const addIbcButton = document.getElementById('add-ibc-button');
+
+    // --- LÓGICA DE AÑADIR/ELIMINAR IBC ---
+    const addIbcButton = document.getElementById('add-ibc-button'); // <- La clave es asegurar que esta línea esté aquí
 
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
@@ -17,8 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function crearNuevoIbc(alias) {
-        console.log(`Creando nuevo IBC con alias: ${alias}`);
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', {
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', { // URL de producción
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ alias: alias })
@@ -28,29 +27,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(nuevoIbc => {
-            console.log('Creación exitosa. Recargando tablero...');
             cargarTablero();
         })
-        .catch(error => console.error('Error en crearNuevoIbc:', error));
+        .catch(error => console.error('Error:', error));
     }
     
-    // ... (la función eliminarIbc no cambia) ...
     function eliminarIbc(ibcId) {
-        if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) return;
-        console.log(`Eliminando IBC con ID: ${ibcId}`);
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { method: 'DELETE' })
+        if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) {
+            return;
+        }
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
+            method: 'DELETE'
+        })
         .then(response => {
             if (!response.ok) throw new Error('Error al eliminar el IBC');
-            console.log(`IBC ${ibcId} eliminado. Recargando tablero...`);
             cargarTablero();
         })
-        .catch(error => console.error('Error en eliminarIbc:', error));
+        .catch(error => console.error('Error:', error));
     }
-
-    // ... (la función updateIbcStatus no cambia) ...
+    
+    // ... (el resto del código no cambia)
+    
     function updateIbcStatus(ibcId, updateData) {
-        console.log(`Actualizando IBC ${ibcId} con datos:`, updateData);
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
@@ -60,21 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            console.log('Actualización exitosa. Recargando tablero...');
             cargarTablero();
         })
-        .catch(error => console.error('Error en updateIbcStatus:', error));
+        .catch(error => console.error('Error al actualizar:', error));
     }
 
     function cargarTablero() {
-        console.log('Iniciando carga del tablero...');
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
-            .then(response => {
-                console.log('Respuesta de la API recibida.');
-                return response.json();
-            })
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/') // URL de producción
+            .then(response => response.json())
             .then(data => {
-                console.log(`Recibidos ${data.length} IBCs. Limpiando y dibujando tarjetas...`);
                 columnas.forEach(col => col.innerHTML = '');
                 data.forEach(ibc => {
                     const card = crearTarjeta(ibc);
@@ -88,12 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         colPlanta.appendChild(card);
                     }
                 });
-                console.log('Tablero dibujado con éxito.');
             })
-            .catch(error => console.error('Error fatal al cargar el tablero:', error));
+            .catch(error => console.error('Error al cargar el tablero:', error));
     }
 
-    // ... (la función crearTarjeta no cambia) ...
     function crearTarjeta(ibc) {
         const div = document.createElement('div');
         div.className = 'card';
@@ -107,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-actions"></div>
         `;
         const deleteButton = div.querySelector('.delete-btn');
-        deleteButton.onclick = () => { eliminarIbc(ibc.id); };
+        deleteButton.onclick = () => {
+            eliminarIbc(ibc.id);
+        };
         const actionsContainer = div.querySelector('.card-actions');
         const btnHistorial = document.createElement('button');
         btnHistorial.textContent = '📖 Ver Historial';
@@ -156,7 +149,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return div;
     }
-    
-    // Carga inicial del tablero
     cargarTablero();
 });
