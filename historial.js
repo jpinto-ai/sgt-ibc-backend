@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title.textContent = `Historial del IBC-${String(ibcId).padStart(3, '0')}`;
         
         // Cargar detalles del IBC
-        fetch(`http://127.0.0.1:8000/api/ibcs/${ibcId}`)
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`)
             .then(response => response.json())
             .then(ibc => {
                 detailsDiv.innerHTML = `
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         // Cargar historial del IBC
-        fetch(`http://127.0.0.1:8000/api/ibcs/${ibcId}/history`)
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}/history`)
             .then(response => response.json())
             .then(historyData => {
                 historyBody.innerHTML = '';

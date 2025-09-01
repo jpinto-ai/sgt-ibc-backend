@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar el estado de un IBC
     function updateIbcStatus(ibcId, updateData) {
-        fetch(`http://127.0.0.1:8000/api/ibcs/${ibcId}`, {
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función principal para cargar y mostrar los IBCs
     function cargarTablero() {
-        fetch('http://127.0.0.1:8000/api/ibcs/')
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
             .then(response => response.json())
             .then(data => {
                 columnas.forEach(col => col.innerHTML = '');
