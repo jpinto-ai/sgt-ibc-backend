@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Referencias a los contenedores de las tarjetas
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');
     const colClientes = document.getElementById('col-clientes');
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
-
-    // --- LÓGICA DE AÑADIR/ELIMINAR IBC ---
-    const addIbcButton = document.getElementById('add-ibc-button'); // <- La clave es asegurar que esta línea esté aquí
+    const addIbcButton = document.getElementById('add-ibc-button');
 
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
@@ -17,69 +14,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function crearNuevoIbc(alias) {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', { // URL de producción
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ alias: alias })
         })
-        .then(response => {
-            if (!response.ok) throw new Error('Error al crear el IBC');
-            return response.json();
-        })
-        .then(nuevoIbc => {
-            cargarTablero();
-        })
+        .then(response => { if (!response.ok) throw new Error('Error al crear'); return response.json(); })
+        .then(nuevoIbc => cargarTablero())
         .catch(error => console.error('Error:', error));
     }
     
     function eliminarIbc(ibcId) {
-        if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) {
-            return;
-        }
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Error al eliminar el IBC');
-            cargarTablero();
-        })
+        if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) return;
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { method: 'DELETE' })
+        .then(response => { if (!response.ok) throw new Error('Error al eliminar'); cargarTablero(); })
         .catch(error => console.error('Error:', error));
     }
-    
-    // ... (el resto del código no cambia)
-    
+
     function updateIbcStatus(ibcId, updateData) {
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
         })
-        .then(response => {
-            if (!response.ok) throw new Error('Falló la actualización');
-            return response.json();
-        })
-        .then(data => {
-            cargarTablero();
-        })
+        .then(response => { if (!response.ok) throw new Error('Falló la actualización'); return response.json(); })
+        .then(data => cargarTablero())
         .catch(error => console.error('Error al actualizar:', error));
     }
 
     function cargarTablero() {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/') // URL de producción
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
             .then(response => response.json())
             .then(data => {
                 columnas.forEach(col => col.innerHTML = '');
                 data.forEach(ibc => {
                     const card = crearTarjeta(ibc);
-                    if (ibc.estado === 'Averiado') {
-                        colAveriados.appendChild(card);
-                    } else if (ibc.estado === 'En Lavado') {
-                        colLavadero.appendChild(card);
-                    } else if (ibc.estado === 'En Cliente') {
-                        colClientes.appendChild(card);
-                    } else {
-                        colPlanta.appendChild(card);
-                    }
+                    if (ibc.estado === 'Averiado') colAveriados.appendChild(card);
+                    else if (ibc.estado === 'En Lavado') colLavadero.appendChild(card);
+                    else if (ibc.estado === 'En Cliente') colClientes.appendChild(card);
+                    else colPlanta.appendChild(card);
                 });
             })
             .catch(error => console.error('Error al cargar el tablero:', error));
@@ -98,22 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card-actions"></div>
         `;
         const deleteButton = div.querySelector('.delete-btn');
-        deleteButton.onclick = () => {
-            eliminarIbc(ibc.id);
-        };
+        deleteButton.onclick = () => eliminarIbc(ibc.id);
         const actionsContainer = div.querySelector('.card-actions');
-        const btnHistorial = document.createElement('button');
-        btnHistorial.textContent = '📖 Ver Historial';
-        btnHistorial.onclick = () => { window.location.href = `historial.html?id=${ibc.id}`; };
-        actionsContainer.appendChild(btnHistorial);
+
         if (ibc.estado === 'Disponible') {
             const btnCliente = document.createElement('button');
             btnCliente.textContent = '🚚 Enviar a Cliente';
             btnCliente.onclick = () => {
-                const clientName = prompt("Por favor, ingresa el nombre del cliente:");
-                if (clientName) {
-                    updateIbcStatus(ibc.id, { estado: 'En Cliente', ubicacion: clientName, cliente_asignado: clientName });
-                }
+                const clientName = prompt("Ingresa el nombre del cliente:");
+                if (clientName) updateIbcStatus(ibc.id, { estado: 'En Cliente', ubicacion: clientName, cliente_asignado: clientName });
             };
             actionsContainer.appendChild(btnCliente);
         }
@@ -149,5 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return div;
     }
+    
     cargarTablero();
 });
