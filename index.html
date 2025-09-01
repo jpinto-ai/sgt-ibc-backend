@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGT-IBC Asistente</title>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <style>
+        body { font-family: sans-serif; max-width: 500px; margin: auto; padding: 20px; }
+        #qr-reader { width: 100%; border: 1px solid #ccc; }
+        button { width: 100%; padding: 15px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        #ibc-info { margin-top: 20px; }
+        #inventoryTable { border-collapse: collapse; width:100%; margin-top: 10px; }
+        #inventoryTable th, #inventoryTable td { border: 1px solid #ddd; padding: 8px; text-align: left;}
+        #inventoryTable th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SGT-IBC Asistente</h1>
+        
+        <div id="qr-reader"></div>
+
+        <hr>
+
+        <div id="ibc-info">
+            <h2>Información del Activo:</h2>
+            <p><strong>ID:</strong> <span id="ibc-id">---</span></p>
+            <p><strong>Estado:</strong> <span id="ibc-estado">---</span></p>
+            <p><strong>Ubicación:</strong> <span id="ibc-ubicacion">---</span></p>
+        </div>
+
+        <div id="action-buttons"></div>
+        
+        <button id="clearButton" style="background-color: #f0ad4e;">Limpiar</button>
+
+        <hr>
+        <h2>Inventario General</h2>
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Alias</th>
+                    <th>Estado</th>
+                    <th>Ubicación</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody"></tbody>
+        </table>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
