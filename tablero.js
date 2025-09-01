@@ -6,9 +6,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
 
-    // Función para actualizar el estado de un IBC
+    // --- LÓGICA DE AÑADIR/ELIMINAR IBC ---
+    const addIbcButton = document.getElementById('add-ibc-button'); // <- La clave es asegurar que esta línea esté aquí
+
+    addIbcButton.addEventListener('click', () => {
+        const alias = prompt("Ingresa el alias para el nuevo IBC:");
+        if (alias) {
+            crearNuevoIbc(alias);
+        }
+    });
+
+    function crearNuevoIbc(alias) {
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', { // URL de producción
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ alias: alias })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error al crear el IBC');
+            return response.json();
+        })
+        .then(nuevoIbc => {
+            cargarTablero();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    function eliminarIbc(ibcId) {
+        if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) {
+            return;
+        }
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error al eliminar el IBC');
+            cargarTablero();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // ... (el resto del código no cambia)
+    
     function updateIbcStatus(ibcId, updateData) {
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
@@ -18,22 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            console.log('Actualización exitosa:', data);
-            cargarTablero(); // Recarga todo el tablero para reflejar el cambio
-        })
-        .catch(error => {
-            console.error('Error al actualizar:', error);
             cargarTablero();
-        });
+        })
+        .catch(error => console.error('Error al actualizar:', error));
     }
 
-    // Función principal para cargar y mostrar los IBCs
     function cargarTablero() {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/') // URL de producción
             .then(response => response.json())
             .then(data => {
                 columnas.forEach(col => col.innerHTML = '');
-
                 data.forEach(ibc => {
                     const card = crearTarjeta(ibc);
                     if (ibc.estado === 'Averiado') {
@@ -50,30 +85,27 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error al cargar el tablero:', error));
     }
 
-    // Función para crear el HTML de una tarjeta de IBC con todos los botones
     function crearTarjeta(ibc) {
         const div = document.createElement('div');
         div.className = 'card';
         div.setAttribute('data-id', ibc.id);
-
         let clienteInfo = (ibc.estado === 'En Cliente') ? `<p>Cliente: <strong>${ibc.cliente_asignado || 'N/A'}</strong></p>` : '';
-
         div.innerHTML = `
+            <button class="delete-btn">🗑️</button>
             <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
             <p>Alias: ${ibc.alias}</p>
             ${clienteInfo}
             <div class="card-actions"></div>
         `;
-        
+        const deleteButton = div.querySelector('.delete-btn');
+        deleteButton.onclick = () => {
+            eliminarIbc(ibc.id);
+        };
         const actionsContainer = div.querySelector('.card-actions');
-        
         const btnHistorial = document.createElement('button');
         btnHistorial.textContent = '📖 Ver Historial';
-        btnHistorial.onclick = () => {
-            window.location.href = `historial.html?id=${ibc.id}`;
-        };
+        btnHistorial.onclick = () => { window.location.href = `historial.html?id=${ibc.id}`; };
         actionsContainer.appendChild(btnHistorial);
-
         if (ibc.estado === 'Disponible') {
             const btnCliente = document.createElement('button');
             btnCliente.textContent = '🚚 Enviar a Cliente';
@@ -115,10 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnReparado.onclick = () => updateIbcStatus(ibc.id, { estado: 'Disponible', ubicacion: 'Planta Bogotá' });
             actionsContainer.appendChild(btnReparado);
         }
-        
         return div;
     }
-
-    // Carga inicial del tablero
     cargarTablero();
 });

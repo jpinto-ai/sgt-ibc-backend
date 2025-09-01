@@ -113,3 +113,26 @@ def actualizar_ibc(ibc_id: int, ibc_update: IBCUpdate, db: Session = Depends(get
     db.commit()
     db.refresh(ibc)
     return ibc
+    # Pega este código al final de tu archivo main.py
+
+from fastapi import Response
+from sqlalchemy.orm import Session
+
+@app.delete("/api/ibcs/{ibc_id}", 
+    summary="Eliminar un IBC",
+    status_code=204
+)
+def eliminar_ibc(ibc_id: int, db: Session = Depends(get_db)):
+    """Elimina un IBC de la base de datos por su ID."""
+    
+    # Primero, borra los registros del historial asociados
+    db.query(IBCHistory).filter(IBCHistory.ibc_id == ibc_id).delete()
+    
+    # Luego, borra el IBC principal
+    ibc = db.query(IBC).filter(IBC.id == ibc_id).first()
+    if ibc is None:
+        raise HTTPException(status_code=404, detail="IBC no encontrado")
+    
+    db.delete(ibc)
+    db.commit()
+    return Response(status_code=204)

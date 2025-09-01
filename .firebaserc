@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "gestion-patios-alianza-team"
-  }
+    "default": "sgt-ibc-alianzateam"
+  },
+  "targets": {},
+  "etags": {}
 }
