@@ -4,14 +4,23 @@ body {
     margin: 0;
     padding: 20px;
 }
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
-h1 { color: #172b4d; }
-#board { display: flex; gap: 20px; }
+
+h1 {
+    color: #172b4d;
+}
+
+#board {
+    display: flex;
+    gap: 20px;
+}
+
 .column {
     background-color: #ebecf0;
     border-radius: 8px;
@@ -19,7 +28,14 @@ h1 { color: #172b4d; }
     width: 270px;
     flex-shrink: 0;
 }
-.column h2 { font-size: 16px; color: #5e6c84; padding: 0 5px; margin-bottom: 15px; }
+
+.column h2 {
+    font-size: 16px;
+    color: #5e6c84;
+    padding: 0 5px;
+    margin-bottom: 15px;
+}
+
 .card {
     background-color: #ffffff;
     border-radius: 5px;
@@ -28,9 +44,24 @@ h1 { color: #172b4d; }
     box-shadow: 0 1px 0 rgba(9,30,66,.25);
     position: relative;
 }
-.card p { margin: 0 0 10px 0; }
-.card .ibc-id { font-weight: bold; font-size: 18px; color: #172b4d; }
-.card-actions { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; }
+
+.card p {
+    margin: 0 0 10px 0;
+}
+
+.card .ibc-id {
+    font-weight: bold;
+    font-size: 18px;
+    color: #172b4d;
+}
+
+.card-actions {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .card-actions button {
     width: 100%;
     padding: 8px;
@@ -40,8 +71,17 @@ h1 { color: #172b4d; }
     background-color: #f0f0f0;
     cursor: pointer;
 }
-.card-actions button:hover { background-color: #e0e0e0; }
-.card-actions .btn-danger { background-color: #d9534f; color: white; border-color: #d43f3a; }
+
+.card-actions button:hover {
+    background-color: #e0e0e0;
+}
+
+.card-actions .btn-danger {
+    background-color: #d9534f;
+    color: white;
+    border-color: #d43f3a;
+}
+
 .delete-btn {
     position: absolute;
     top: 10px;
@@ -52,4 +92,7 @@ h1 { color: #172b4d; }
     cursor: pointer;
     opacity: 0.5;
 }
-.delete-btn:hover { opacity: 1; }
+
+.delete-btn:hover {
+    opacity: 1;
+}
