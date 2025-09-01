@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Referencias a los contenedores de las tarjetas
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');
     const colClientes = document.getElementById('col-clientes');
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
-
-    // --- LÓGICA DE AÑADIR/ELIMINAR IBC ---
-    const addIbcButton = document.getElementById('add-ibc-button'); // <- La clave es asegurar que esta línea esté aquí
+    const addIbcButton = document.getElementById('add-ibc-button');
 
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
@@ -17,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function crearNuevoIbc(alias) {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', { // URL de producción
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ alias: alias })
@@ -31,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error:', error));
     }
-    
+
     function eliminarIbc(ibcId) {
         if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) {
             return;
         }
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -45,11 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error:', error));
     }
-    
-    // ... (el resto del código no cambia)
-    
+
     function updateIbcStatus(ibcId, updateData) {
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { // URL de producción
+        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
@@ -65,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cargarTablero() {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/') // URL de producción
+        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
             .then(response => response.json())
             .then(data => {
                 columnas.forEach(col => col.innerHTML = '');
