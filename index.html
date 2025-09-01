@@ -3,38 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGT-IBC: Tablero de Control</title>
+    <title>SGT-IBC Asistente</title>
     <link rel="stylesheet" href="style.css">
-</head>
+    </head>
 <body>
-
     <header>
-        <img src="logo-alianza-team.svg" alt="Alianza Team Logo" class="logo">
-    <h1>Tablero de Control</h1>
+        <div class="logo-container">
+            <img src="logo-alianza-team.svg" alt="Logo Alianza Team">
+            <h1>Tablero de Control</h1>
+        </div>
         <button id="add-ibc-button">+ Añadir Nuevo IBC</button>
     </header>
 
-    <main id="board">
-        <div class="column">
-            <h2>✅ En Planta (Disponibles)</h2>
-            <div class="cards-container" id="col-planta"></div>
-        </div>
+    <div class="dashboard-container">
+        <div class="column" id="col-planta">
+            <h2><img src="https://img.icons8.com/ios-filled/24/60B246/checked--v1.png" alt="Disponible"> En Planta (Disponibles)</h2>
+            </div>
 
-        <div class="column">
-            <h2>💧 En Lavadero</h2>
-            <div class="cards-container" id="col-lavadero"></div>
-        </div>
+        <div class="column" id="col-lavadero">
+            <h2><img src="https://img.icons8.com/ios-filled/24/60B246/water.png" alt="Lavadero"> En Lavadero</h2>
+            </div>
 
-        <div class="column">
-            <h2>🚚 En Clientes</h2>
-            <div class="cards-container" id="col-clientes"></div>
-        </div>
+        <div class="column" id="col-clientes">
+            <h2><img src="https://img.icons8.com/ios-filled/24/60B246/delivery-truck.png" alt="Clientes"> En Clientes</h2>
+            </div>
 
-        <div class="column">
-            <h2>❌ Averiados</h2>
-            <div class="cards-container" id="col-averiados"></div>
-        </div>
-    </main>
+        <div class="column" id="col-averiados">
+            <h2><img src="https://img.icons8.com/ios-filled/24/FA5252/cancel--v1.png" alt="Averiados"> Averiados</h2>
+            </div>
+    </div>
 
     <script src="tablero.js"></script>
 </body>
