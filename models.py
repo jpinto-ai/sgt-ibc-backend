@@ -1,14 +1,16 @@
-# archivo: models.py
+import os
+import datetime
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
-import datetime
 
-# --- USA ESTA LÍNEA PARA TRABAJAR EN TU COMPUTADOR ---
-# Recuerda reemplazar "TU_CONTRASEÑA" con tu contraseña real de PostgreSQL.
-DATABASE_URL = "postgresql://postgres:0714a@localhost/sgt_ibc_db"
-
+# Si la variable de entorno DATABASE_URL existe (en Render), la usa.
+# Si no, usa la dirección local (para tu computador).
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL", 
+    "postgresql://postgres:0714a@localhost/sgt_ibc_db"
+)
 Base = declarative_base()
 
 class IBCHistory(Base):
