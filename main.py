@@ -6,12 +6,16 @@ from typing import List, Optional
 from datetime import datetime
 from models import IBC, IBCHistory, SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
+import io
+import csv
+from fastapi.responses import StreamingResponse
 
 app = FastAPI(title="SGT-IBC API", version="1.0.0")
 
 origins = ["*"]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
+# --- Modelos de Datos Pydantic ---
 class IBCCreate(BaseModel):
     alias: str
 
@@ -38,6 +42,7 @@ class IBC_Data(BaseModel):
     class Config:
         orm_mode = True
 
+# --- Función de Base de Datos ---
 def get_db():
     db = SessionLocal()
     try:
@@ -45,6 +50,7 @@ def get_db():
     finally:
         db.close()
 
+# --- Endpoints de la API ---
 @app.get("/")
 def read_root():
     return {"Proyecto": "SGT-IBC API", "Status": "Operacional"}
@@ -100,53 +106,30 @@ def eliminar_ibc(ibc_id: int, db: Session = Depends(get_db)):
     db.delete(ibc)
     db.commit()
     return Response(status_code=204)
-    # Pega este código al final de tu archivo main.py
-
-@app.get("/api/history/all", 
-    response_model=List[IBCHistory_Data], 
-    summary="Obtener trazabilidad global"
-)
+    
+@app.get("/api/history/all", response_model=List[IBCHistory_Data], summary="Obtener trazabilidad global")
 def obtener_trazabilidad_global(db: Session = Depends(get_db)):
-    """Devuelve todos los registros del historial de todos los IBCs, ordenados por fecha descendente."""
     historial_completo = db.query(IBCHistory).order_by(IBCHistory.timestamp.desc()).all()
     return historial_completo
-    # Pega este código al final de tu archivo main.py
-import io
-import csv
-from fastapi.responses import StreamingResponse
 
-@app.get("/api/history/export", 
-    summary="Exportar trazabilidad global a CSV"
-)
+@app.get("/api/history/export", summary="Exportar trazabilidad global a CSV")
 def exportar_trazabilidad_csv(db: Session = Depends(get_db)):
-    """Genera y devuelve un archivo CSV con todo el historial de movimientos."""
-    
-    # Obtenemos todos los registros del historial
     historial = db.query(IBCHistory).order_by(IBCHistory.timestamp.desc()).all()
-    
-    # Usamos un buffer en memoria para crear el archivo CSV
     output = io.StringIO()
     writer = csv.writer(output)
-    
-    # Escribimos la fila del encabezado
     writer.writerow(['ID_Registro', 'ID_IBC', 'Fecha_Hora', 'Estado', 'Ubicacion', 'Cliente_Asignado'])
-    
-    # Escribimos cada registro del historial
     for record in historial:
         writer.writerow([
             record.id,
             record.ibc_id,
-            record.timestamp.strftime('%Y-%m-%d %H:%M:%S'), # Formato de fecha estándar
+            record.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
             record.estado,
             record.ubicacion,
             record.cliente_asignado
         ])
-    
-    # Preparamos la respuesta para que el navegador la descargue
     response = StreamingResponse(
         iter([output.getvalue()]),
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=trazabilidad_ibc_{datetime.now().strftime('%Y%m%d')}.csv"}
     )
-    
     return response
