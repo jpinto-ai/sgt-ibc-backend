@@ -242,3 +242,24 @@ main.container {
 .header-button:hover {
     background-color: #e6a600; /* Naranja un poco más oscuro */
 }
+/* --- Estilos para el Encabezado Global --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Un fondo claro para el header */
+    border-bottom: 1px solid #dee2e6;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre el logo y el título */
+}
+
+.header-left img {
+    height: 60px; /* Tamaño del logo */
+    vertical-align: middle; /* Alineación vertical */
+}
