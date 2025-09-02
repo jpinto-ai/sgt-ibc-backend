@@ -160,3 +160,62 @@ h1 {
         min-width: unset;
     }
 }
+/* --- ESTILOS ADICIONALES PARA LA PÁGINA DE HISTORIAL --- */
+
+/* Contenedor principal de la página de historial */
+main.container {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Enlace para volver al tablero */
+.back-link {
+    text-decoration: none;
+    color: #0052cc;
+    margin-bottom: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+/* Tarjeta de resumen de detalles del IBC */
+.summary-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Contenedor de la tabla de historial */
+.table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden; /* Para aplicar bordes redondeados a la tabla */
+}
+
+#historyTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#historyTable th, #historyTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+#historyTable thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #343a40;
+}
+
+#historyTable tbody tr:last-child td {
+    border-bottom: none; /* Look más limpio sin la última línea */
+}
+
+#historyTable tbody tr:hover {
+    background-color: #f1f1f1; /* Resalta la fila al pasar el ratón */
+}
