@@ -5,7 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 import datetime
 
-DATABASE_URL = "postgresql://sgt_ibc_db_user:zXl6TIGg7ygymGPDmInJmAeEFSWdlMpU@dpg-d2qh1jfdiees73d07uhg-a.oregon-postgres.render.com/sgt_ibc_db" # ¡Recuerda usar tu contraseña!
+# --- USA ESTA LÍNEA PARA TRABAJAR EN TU COMPUTADOR ---
+# Recuerda reemplazar "TU_CONTRASEÑA" con tu contraseña real de PostgreSQL.
+DATABASE_URL = "postgresql://postgres:0714a@localhost/sgt_ibc_db"
 
 Base = declarative_base()
 
@@ -26,9 +28,7 @@ class IBC(Base):
     ubicacion = Column(String, default="Planta Bogotá", nullable=False)
     cliente_asignado = Column(String, nullable=True)
     fecha_ultimo_movimiento = Column(DateTime(timezone=True), server_default=func.now(), onupdate=datetime.datetime.now)
-    
-    # Relación para acceder al historial desde un IBC
-    history = relationship("IBCHistory", backref="ibc")
+    history = relationship("IBCHistory", backref="ibc", cascade="all, delete-orphan")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

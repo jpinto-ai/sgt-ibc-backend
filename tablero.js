@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE_URL = 'https://sgt-ibc-api.onrender.com';
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');
     const colClientes = document.getElementById('col-clientes');
@@ -8,13 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
-        if (alias) {
-            crearNuevoIbc(alias);
-        }
+        if (alias) crearNuevoIbc(alias);
     });
 
     function crearNuevoIbc(alias) {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/', {
+        fetch(`${API_BASE_URL}/api/ibcs/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ alias: alias })
@@ -26,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function eliminarIbc(ibcId) {
         if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) return;
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, { method: 'DELETE' })
+        fetch(`${API_BASE_URL}/api/ibcs/${ibcId}`, { method: 'DELETE' })
         .then(response => { if (!response.ok) throw new Error('Error al eliminar'); cargarTablero(); })
         .catch(error => console.error('Error:', error));
     }
 
     function updateIbcStatus(ibcId, updateData) {
-        fetch(`https://sgt-ibc-api.onrender.com/api/ibcs/${ibcId}`, {
+        fetch(`${API_BASE_URL}/api/ibcs/${ibcId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData)
@@ -43,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cargarTablero() {
-        fetch('https://sgt-ibc-api.onrender.com/api/ibcs/')
+        fetch(`${API_BASE_URL}/api/ibcs/`)
             .then(response => response.json())
             .then(data => {
                 columnas.forEach(col => col.innerHTML = '');
@@ -66,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         div.innerHTML = `
             <button class="delete-btn">🗑️</button>
             <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
-            <p>Alias: ${ibc.alias}</p>
             ${clienteInfo}
             <div class="card-actions"></div>
         `;

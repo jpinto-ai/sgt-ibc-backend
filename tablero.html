@@ -4,29 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SGT-IBC: Tablero de Control</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tablero-style.css">
 </head>
 <body>
+   
     <header>
+    <div class="header-left">
+        <img src="logo-alianza-team.svg" alt="Logo de Alianza Team">
         <h1>SGT-IBC: Tablero de Control</h1>
-        <button id="add-ibc-button">+ Añadir Nuevo IBC</button>
-    </header>
+    </div>
+    <button id="add-ibc-button">+ Añadir Nuevo IBC</button>
+</header>
     <main id="board">
         <div class="column">
-            <h2>✅ En Planta (Disponibles)</h2>
-            <div class="cards-container" id="col-planta"></div>
+            <h2>✅ En Planta</h2>
+            <div id="col-planta"></div>
         </div>
         <div class="column">
             <h2>💧 En Lavadero</h2>
-            <div class="cards-container" id="col-lavadero"></div>
+            <div id="col-lavadero"></div>
         </div>
         <div class="column">
             <h2>🚚 En Clientes</h2>
-            <div class="cards-container" id="col-clientes"></div>
+            <div id="col-clientes"></div>
         </div>
         <div class="column">
             <h2>❌ Averiados</h2>
-            <div class="cards-container" id="col-averiados"></div>
+            <div id="col-averiados"></div>
         </div>
     </main>
     <script src="tablero.js"></script>
