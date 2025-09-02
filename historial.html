@@ -10,24 +10,28 @@
     <header>
         <h1 id="historial-title">Historial del IBC</h1>
     </header>
+
     <main style="padding: 20px;">
-        <a href="tablero.html" style="text-decoration: none; color: #0052cc;">&leftarrow; Volver al Tablero</a>
+        <a href="index.html" style="text-decoration: none; color: #0052cc; margin-bottom: 20px; display: inline-block;">&leftarrow; Volver al Tablero</a>
+        
         <div id="ibc-details" class="card" style="margin-top: 20px;">
             <p>Cargando detalles...</p>
         </div>
+
         <h2>Trazabilidad de Movimientos</h2>
         <table id="historyTable" style="width:100%; margin-top: 10px; border-collapse: collapse;">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Fecha</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Fecha y Hora</th>
                     <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Estado</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Ubicación</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Cliente</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;">Ubicación / Cliente</th>
                 </tr>
             </thead>
-            <tbody id="historyBody"></tbody>
+            <tbody id="historyBody">
+                </tbody>
         </table>
     </main>
+
     <script src="historial.js"></script>
 </body>
 </html>

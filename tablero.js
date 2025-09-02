@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => cargarTablero())
         .catch(error => console.error('Error al actualizar:', error));
     }
-
     function cargarTablero() {
         fetch(`${API_BASE_URL}/api/ibcs/`)
             .then(response => response.json())
@@ -56,21 +55,28 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error('Error al cargar el tablero:', error));
     }
-
     function crearTarjeta(ibc) {
-        const div = document.createElement('div');
-        div.className = 'card';
-        div.setAttribute('data-id', ibc.id);
-        let clienteInfo = (ibc.estado === 'En Cliente') ? `<p>Cliente: <strong>${ibc.cliente_asignado || 'N/A'}</strong></p>` : '';
-        div.innerHTML = `
-            <button class="delete-btn">🗑️</button>
-            <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
-            ${clienteInfo}
-            <div class="card-actions"></div>
-        `;
-        const deleteButton = div.querySelector('.delete-btn');
-        deleteButton.onclick = () => eliminarIbc(ibc.id);
-        const actionsContainer = div.querySelector('.card-actions');
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.setAttribute('data-id', ibc.id);
+    let clienteInfo = (ibc.estado === 'En Cliente') ? `<p>Cliente: <strong>${ibc.cliente_asignado || 'N/A'}</strong></p>` : '';
+    div.innerHTML = `
+        <button class="delete-btn">🗑️</button>
+        <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
+        ${clienteInfo}
+        <div class="card-actions"></div>
+    `;
+    const deleteButton = div.querySelector('.delete-btn');
+    deleteButton.onclick = () => eliminarIbc(ibc.id);
+    const actionsContainer = div.querySelector('.card-actions');
+    // --- BOTÓN NUEVO DE HISTORIAL ---
+    const btnHistorial = document.createElement('button');
+    btnHistorial.textContent = '📖 Ver Historial';
+    btnHistorial.onclick = () => {
+        // Esta línea nos lleva a la nueva página de historial
+        window.location.href = `historial.html?id=${ibc.id}`;
+    };
+    actionsContainer.appendChild(btnHistorial);
 
         if (ibc.estado === 'Disponible') {
             const btnCliente = document.createElement('button');
