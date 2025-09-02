@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(ibc => {
                 detailsDiv.innerHTML = `
                     <p class="ibc-id">ID: ${ibc.id}</p>
-                    <p>Alias: ${ibc.alias}</p>
                     <p>Estado Actual: <strong>${ibc.estado}</strong></p>
                     <p>Ubicación Actual: <strong>${ibc.ubicacion}</strong></p>
                 `;
