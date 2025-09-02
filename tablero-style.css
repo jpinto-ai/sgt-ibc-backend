@@ -219,3 +219,26 @@ main.container {
 #historyTable tbody tr:hover {
     background-color: #f1f1f1; /* Resalta la fila al pasar el ratón */
 }
+/* --- ESTILOS PARA LOS BOTONES DEL ENCABEZADO --- */
+.header-right {
+    display: flex;
+    gap: 10px; /* Espacio entre botones */
+}
+
+.header-button {
+    background-color: #f2b705; /* Naranja/Amarillo corporativo */
+    color: #002d5b; /* Azul oscuro corporativo */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.header-button:hover {
+    background-color: #e6a600; /* Naranja un poco más oscuro */
+}

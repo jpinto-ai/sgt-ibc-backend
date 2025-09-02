@@ -9,10 +9,13 @@
 <body>
     <header>
     <div class="header-left">
-        <img src="logo-alianza-team.svg" alt="Logo de Alianza Team">
-        <h1>SGT-IBC: Tablero de Control</h1>
+        <img src="logo-alianza-team.png" alt="Logo Alianza Team">
+        <h1>Tablero de Control</h1>
     </div>
-    <button id="add-ibc-button">+ Añadir Nuevo IBC</button>
+    <div class="header-right">
+        <a href="https://sgt-ibc-api.onrender.com/api/history/export" class="header-button export-button">Exportar a CSV</a>
+        <button id="add-ibc-button" class="header-button">+ Añadir Nuevo IBC</button>
+    </div>
 </header>
     <main id="board">
         <div class="column">
