@@ -7,7 +7,7 @@ import datetime
 
 # --- USA ESTA LÍNEA PARA TRABAJAR EN TU COMPUTADOR ---
 # Recuerda reemplazar "TU_CONTRASEÑA" con tu contraseña real de PostgreSQL.
-python import os DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = "postgresql://postgres:0714a@localhost/sgt_ibc_db"
 
 Base = declarative_base()
 
