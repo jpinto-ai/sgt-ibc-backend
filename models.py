@@ -5,10 +5,9 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
-# Lee la URL de la base de datos desde el entorno (Render) o usa la local.
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", 
-    "postgresql://postgres:0714a@localhost/sgt_ibc_db"
+    "postgresql://postgres:tu_contraseña_segura@localhost/sgt_ibc_db"
 )
 
 Base = declarative_base()
@@ -29,12 +28,9 @@ class IBC(Base):
     estado = Column(String, default="Disponible", nullable=False)
     ubicacion = Column(String, default="Planta Bogotá", nullable=False)
     cliente_asignado = Column(String, nullable=True)
-    observaciones = Column(String, nullable=True)
     fecha_ultimo_movimiento = Column(DateTime(timezone=True), server_default=func.now(), onupdate=datetime.datetime.now)
     history = relationship("IBCHistory", backref="ibc", cascade="all, delete-orphan")
 
-# --- LÍNEA CLAVE AÑADIDA ---
-# Aseguramos que la URL de Render use 'postgresql://' que es lo que SQLAlchemy espera.
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 

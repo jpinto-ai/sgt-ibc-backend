@@ -101,10 +101,6 @@ function crearTarjeta(ibc) {
     div.className = 'card';
     div.setAttribute('data-id', ibc.id);
 
-    // --- LÓGICA NUEVA: Mostrar observaciones si existen ---
-    let clienteInfo = (ibc.estado === 'En Cliente') ? `<p>Cliente: <strong>${ibc.cliente_asignado || 'N/A'}</strong></p>` : '';
-    let observacionesInfo = ibc.observaciones ? `<p style="font-style: italic; color: #555;">Obs: ${ibc.observaciones}</p>` : '';
-
     div.innerHTML = `
         <button class="delete-btn">🗑️</button>
         <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
