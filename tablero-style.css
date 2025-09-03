@@ -263,3 +263,38 @@ header {
     height: 60px; /* Tamaño del logo */
     vertical-align: middle; /* Alineación vertical */
 }
+/* --- Estilos para el nuevo menú de acciones --- */
+.actions-menu-button {
+    position: absolute;
+    top: 10px;
+    right: 40px; /* Al lado del botón de eliminar */
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+    color: #888;
+}
+.actions-menu-button:hover {
+    color: #333;
+}
+.dropdown-content {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.dropdown-content button {
+    width: 100%;
+    text-align: left;
+}
+.show {
+    display: block; /* Clase para mostrar el menú */
+}

@@ -48,7 +48,7 @@ class IBCUpdate(BaseModel):
     estado: Optional[str] = None
     ubicacion: Optional[str] = None
     cliente_asignado: Optional[str] = None
-    observaciones: Optional[str] = None
+    observaciones: Optional[str] = None # <-- ASEGÚRATE DE TENER ESTA LÍNEA
 
 class IBCHistory_Data(BaseModel):
     id: int
@@ -65,7 +65,7 @@ class IBC_Data(BaseModel):
     estado: str
     ubicacion: str
     cliente_asignado: Optional[str] = None
-    observaciones: Optional[str] = None
+    observaciones: Optional[str] = None # <-- ASEGÚRATE DE TENER ESTA LÍNEA
     class Config:
         orm_mode = True
 
