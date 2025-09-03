@@ -36,7 +36,7 @@ header {
 h1 {
     color: var(--color-verde-oscuro);
     margin: 0;
-    font-size: 22px;
+    font-size: 32px;
 }
 #add-ibc-button {
     background-color: var(--color-verde);
@@ -62,7 +62,7 @@ h1 {
     width: 270px;
     flex-shrink: 0;
 }
-.column h2 { font-size: 16px; color: #5e6c84; }
+.column h2 { font-size: 20px; color: #5e6c84; }
 
 /* --- TARJETAS --- */
 .card {
