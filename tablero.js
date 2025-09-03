@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="delete-btn">🗑️</button>
             <button class="obs-btn">📝</button>
             <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
-            <p>Alias: ${ibc.alias}</p>
             ${clienteInfo}
             ${observacionesInfo}
             <div class="card-actions"></div>
