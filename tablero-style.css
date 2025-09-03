@@ -124,9 +124,9 @@ h1 {
 }
 
 .card-actions .btn-danger {
-    background-color: #df9890;
+    background-color: #db7266;
     color: white;
-    border-color: #df9890;
+    border-color: #db7266;
 }
 .card-actions .btn-danger:hover {
     background-color: #c0392b;
