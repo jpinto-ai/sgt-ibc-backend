@@ -88,7 +88,7 @@ function cargarTablero() {
 
             // --- ESTA ES LA LÓGICA NUEVA ---
             // Ahora, actualizamos los títulos con el contador
-            document.querySelector('#col-planta').previousElementSibling.textContent = `✅ En Planta (Disponibles) (${colPlanta.children.length})`;
+            document.querySelector('#col-planta').previousElementSibling.textContent = `✅ En Planta (${colPlanta.children.length})`;
             document.querySelector('#col-lavadero').previousElementSibling.textContent = `💧 En Lavadero (${colLavadero.children.length})`;
             document.querySelector('#col-clientes').previousElementSibling.textContent = `🚚 En Clientes (${colClientes.children.length})`;
             document.querySelector('#col-averiados').previousElementSibling.textContent = `❌ Averiados (${colAveriados.children.length})`;
