@@ -1,4 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- CONEXIÓN AL WEBSOCKET ---
+    // La URL de tu API en Render, pero cambiando https por wss (WebSocket Seguro)
+    const ws = new WebSocket("wss://sgt-ibc-api.onrender.com/ws");
+
+    // Esta función se ejecuta cada vez que el servidor nos envía un mensaje
+    ws.onmessage = function(event) {
+        if (event.data === "update") {
+            console.log("¡Notificación de actualización recibida! Recargando tablero...");
+            cargarTablero(); // Si recibimos 'update', recargamos el tablero
+        }
+    };
+    
+    ws.onopen = function(event) {
+        console.log("Conexión WebSocket establecida.");
+    };
+
+    ws.onclose = function(event) {
+        console.log("Conexión WebSocket cerrada. Intentando reconectar en 5 segundos...");
+        // Opcional: Lógica para intentar reconectar
+        setTimeout(() => {
+            // Lógica de reconexión aquí si se desea
+        }, 5000);
+    };
+
+    ws.onerror = function(event) {
+        console.error("Error en WebSocket:", event);
+    };
+
+    // --- El resto de tu código de tablero.js no cambia ---
     const API_BASE_URL = 'https://sgt-ibc-api.onrender.com';
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');

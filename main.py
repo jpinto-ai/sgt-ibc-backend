@@ -1,7 +1,7 @@
 # archivo: main.py
-from fastapi import FastAPI, Depends, HTTPException, Response
+from fastapi import FastAPI, Depends, HTTPException, Response, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 from models import IBC, IBCHistory, SessionLocal
@@ -9,6 +9,25 @@ from fastapi.middleware.cors import CORSMiddleware
 import io
 import csv
 from fastapi.responses import StreamingResponse
+
+# --- LÓGICA PARA WEB SOCKETS ---
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+manager = ConnectionManager()
+# --- FIN DE LA LÓGICA PARA WEB SOCKETS ---
 
 app = FastAPI(title="SGT-IBC API", version="1.0.0")
 
