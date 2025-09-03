@@ -11,7 +11,7 @@ header {
     align-items: center;
     margin-bottom: 20px;
     padding: 10px 20px;
-    background-color: #f8f9fa; /* Un fondo claro para el header */
+    background-color: #ffffff; /* Un fondo claro para el header */
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -36,7 +36,7 @@ h1 {
 }
 
 #add-ibc-button { /* Estilo básico para el botón Añadir */
-    background-color: #5aac44;
+    background-color: #3d8b41;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -46,7 +46,7 @@ h1 {
 }
 
 #add-ibc-button:hover {
-    background-color: #61bd4f;
+    background-color: #285a2a;
 }
 
 #board {
