@@ -7,7 +7,7 @@
     --color-fondo: #f4f5f7;
     --color-columna: #ebecf0;
     --color-tarjeta: #ffffff;
-    --color-rojo-peligro: #e74c3c;
+    --color-rojo-peligro: #e36b5d;
 }
 
 body {
@@ -134,9 +134,9 @@ main.container { padding: 20px; max-width: 900px; margin: auto; }
 }
 
 .export-button {
-    background-color: #6c757d; /* Un color gris neutro para diferenciar */
+    background-color: #f2b705; /* Un color gris neutro para diferenciar */
 }
 
 .export-button:hover {
-    background-color: #5a6268;
+    background-color: #f2b705;
 }
