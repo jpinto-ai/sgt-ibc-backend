@@ -36,7 +36,7 @@ header {
 h1 {
     color: var(--color-verde-oscuro);
     margin: 0;
-    font-size: 40px;
+    font-size: 30px;
 }
 #add-ibc-button {
     background-color: var(--color-verde);
