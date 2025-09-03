@@ -48,6 +48,7 @@ class IBCUpdate(BaseModel):
     estado: Optional[str] = None
     ubicacion: Optional[str] = None
     cliente_asignado: Optional[str] = None
+    observaciones: Optional[str] = None
 
 class IBCHistory_Data(BaseModel):
     id: int
@@ -64,6 +65,7 @@ class IBC_Data(BaseModel):
     estado: str
     ubicacion: str
     cliente_asignado: Optional[str] = None
+    observaciones: Optional[str] = None
     class Config:
         orm_mode = True
 
@@ -142,4 +144,26 @@ async def eliminar_ibc(ibc_id: int, db: Session = Depends(get_db)):
     db.delete(ibc)
     db.commit()
     await manager.broadcast("update")
-    return Response
+    return Response(status_code=204)
+
+@app.get("/api/history/export", summary="Exportar trazabilidad global a CSV")
+def exportar_trazabilidad_csv(db: Session = Depends(get_db)):
+    historial = db.query(IBCHistory).order_by(IBCHistory.timestamp.desc()).all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['ID_Registro', 'ID_IBC', 'Fecha_Hora', 'Estado', 'Ubicacion', 'Cliente_Asignado'])
+    for record in historial:
+        writer.writerow([
+            record.id,
+            record.ibc_id,
+            record.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            record.estado,
+            record.ubicacion,
+            record.cliente_asignado
+        ])
+    response = StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=trazabilidad_ibc_{datetime.now().strftime('%Y%m%d')}.csv"}
+    )
+    return response
