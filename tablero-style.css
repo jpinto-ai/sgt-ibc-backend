@@ -1,300 +1,112 @@
+/* --- ESTILOS GENERALES Y CORPORATIVOS --- */
+:root {
+    --color-verde: #3d8b41;
+    --color-verde-oscuro: #285a2a;
+    --color-amarillo: #f2b705;
+    --color-texto: #172b4d;
+    --color-fondo: #f4f5f7;
+    --color-columna: #ebecf0;
+    --color-tarjeta: #ffffff;
+    --color-rojo-peligro: #e74c3c;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f4f5f7;
+    background-color: var(--color-fondo);
     margin: 0;
     padding: 20px;
 }
 
+/* --- ENCABEZADO --- */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     padding: 10px 20px;
-    background-color: #ffffff; /* Un fondo claro para el header */
+    background-color: var(--color-tarjeta);
     border-bottom: 1px solid #dee2e6;
 }
-
 .header-left {
     display: flex;
     align-items: center;
-    gap: 15px; /* Espacio entre el logo y el título */
+    gap: 15px;
 }
-
-.header-left img {
-    height: 60px; /* Tamaño del logo */
-}
-
+.header-left img { height: 40px; }
 h1 {
-    color: #285a2a;
-    margin: 0; /* Quita el margen por defecto del h1 */
-    font-size: 35px;
+    color: var(--color-verde-oscuro);
+    margin: 0;
+    font-size: 22px;
 }
-
-h1 {
-    color: #285a2a;
-}
-
-#add-ibc-button { /* Estilo básico para el botón Añadir */
-    background-color: #3d8b41;
+#add-ibc-button {
+    background-color: var(--color-verde);
     color: white;
     border: none;
     padding: 10px 15px;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-weight: bold;
 }
+#add-ibc-button:hover { background-color: var(--color-verde-oscuro); }
 
-#add-ibc-button:hover {
-    background-color: #285a2a;
-}
-
+/* --- TABLERO Y COLUMNAS --- */
 #board {
-    display: flex; /* <<-- ESTA ES LA LÍNEA CLAVE PARA LAS COLUMNAS */
+    display: flex;
     gap: 20px;
-    align-items: flex-start; /* Asegura que las columnas empiecen arriba */
+    align-items: flex-start;
 }
-
 .column {
-    background-color: #ebecf0;
+    background-color: var(--color-columna);
     border-radius: 8px;
-    padding: 1px 15px 15px 15px;
-    width: 270px; /* Ancho fijo para cada columna */
-    flex-shrink: 0; /* Evita que las columnas se encojan */
+    padding: 15px;
+    width: 270px;
+    flex-shrink: 0;
 }
+.column h2 { font-size: 16px; color: #5e6c84; }
 
-.column h2 {
-    font-size: 24px;
-    color: #5e6c84;
-    padding: 0 5px;
-    margin-bottom: 10px;
-    display: flex; /* Para alinear el icono con el texto */
-    align-items: center;
-    gap: 8px;
-}
-
-.column h2 img { /* Estilos para los iconos dentro del h2 */
-    height: 18px;
-    width: 18px;
-}
-
+/* --- TARJETAS --- */
 .card {
-    background-color: #ffffff;
+    background-color: var(--color-tarjeta);
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     position: relative;
 }
-
-.card p {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-}
-
 .card .ibc-id {
     font-weight: bold;
     font-size: 18px;
-    color: #285a2a;
+    color: var(--color-verde-oscuro);
+    margin-bottom: 5px;
 }
-
-.card-actions {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.card-actions button {
-    width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    display: flex; /* Para alinear el icono con el texto del botón */
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.card-actions button:hover {
-    background-color: #e0e0e0;
-}
-
-.card-actions .btn-danger {
-    background-color: #db7266;
-    color: white;
-    border-color: #db7266;
-}
-.card-actions .btn-danger:hover {
-    background-color: #c0392b;
-}
-
-.delete-btn {
+.card p { margin: 0 0 10px 0; }
+.delete-btn, .obs-btn {
     position: absolute;
     top: 10px;
-    right: 10px;
     background: none;
     border: none;
     font-size: 18px;
     cursor: pointer;
     opacity: 0.5;
-    color: #a0a0a0; /* Un gris más suave para el icono de borrar */
 }
+.delete-btn { right: 10px; }
+.obs-btn { right: 40px; }
+.delete-btn:hover, .obs-btn:hover { opacity: 1; }
 
-.delete-btn:hover {
-    opacity: 1;
-    color: #eb5a46; /* Rojo suave al pasar el ratón */
+/* --- BOTONES DE ACCIÓN EN TARJETAS --- */
+.card-actions { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; }
+.card-actions button {
+    width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ccc;
+    border-radius: 3px; background-color: #f0f0f0; cursor: pointer;
 }
+.card-actions button:hover { background-color: #e0e0e0; }
+.card-actions .btn-danger { background-color: var(--color-rojo-peligro); color: white; }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    #board {
-        flex-direction: column; /* Apila las columnas en pantallas pequeñas */
-        align-items: center;
-    }
-    .column {
-        width: 90%; /* Ocupa casi todo el ancho */
-        min-width: unset;
-    }
-}
-/* --- ESTILOS ADICIONALES PARA LA PÁGINA DE HISTORIAL --- */
-
-/* Contenedor principal de la página de historial */
-main.container {
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
-}
-
-/* Enlace para volver al tablero */
-.back-link {
-    text-decoration: none;
-    color: #0052cc;
-    margin-bottom: 20px;
-    display: inline-block;
-    font-weight: bold;
-}
-
-/* Tarjeta de resumen de detalles del IBC */
-.summary-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-}
-
-/* Contenedor de la tabla de historial */
-.table-container {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    overflow: hidden; /* Para aplicar bordes redondeados a la tabla */
-}
-
-#historyTable {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-#historyTable th, #historyTable td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e0e0e0;
-    text-align: left;
-}
-
-#historyTable thead th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #343a40;
-}
-
-#historyTable tbody tr:last-child td {
-    border-bottom: none; /* Look más limpio sin la última línea */
-}
-
-#historyTable tbody tr:hover {
-    background-color: #f1f1f1; /* Resalta la fila al pasar el ratón */
-}
-/* --- ESTILOS PARA LOS BOTONES DEL ENCABEZADO --- */
-.header-right {
-    display: flex;
-    gap: 10px; /* Espacio entre botones */
-}
-
-.header-button {
-    background-color: #f2b705; /* Naranja/Amarillo corporativo */
-    color: #002d5b; /* Azul oscuro corporativo */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-}
-
-.header-button:hover {
-    background-color: #e6a600; /* Naranja un poco más oscuro */
-}
-/* --- Estilos para el Encabezado Global --- */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #f8f9fa; /* Un fondo claro para el header */
-    border-bottom: 1px solid #dee2e6;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Espacio entre el logo y el título */
-}
-
-.header-left img {
-    height: 60px; /* Tamaño del logo */
-    vertical-align: middle; /* Alineación vertical */
-}
-/* --- Estilos para el nuevo menú de acciones --- */
-.actions-menu-button {
-    position: absolute;
-    top: 10px;
-    right: 40px; /* Al lado del botón de eliminar */
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0 5px;
-    color: #888;
-}
-.actions-menu-button:hover {
-    color: #333;
-}
-.dropdown-content {
-    display: none; /* Oculto por defecto */
-    position: absolute;
-    right: 10px;
-    top: 40px;
-    background-color: white;
-    min-width: 180px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 5px;
-    overflow: hidden;
-}
-.dropdown-content button {
-    width: 100%;
-    text-align: left;
-}
-.show {
-    display: block; /* Clase para mostrar el menú */
-}
+/* --- PÁGINA DE HISTORIAL --- */
+main.container { padding: 20px; max-width: 900px; margin: auto; }
+.back-link { text-decoration: none; color: #0052cc; margin-bottom: 20px; display: inline-block; }
+.summary-card { margin-top: 20px; }
+#historyTable { width: 100%; border-collapse: collapse; }
+#historyTable th, #historyTable td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; }
+#historyTable thead th { background-color: #f8f9fa; }
+#historyTable tbody tr:hover { background-color: #f1f1f1; }
