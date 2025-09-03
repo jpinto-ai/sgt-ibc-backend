@@ -69,21 +69,32 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => cargarTablero())
         .catch(error => console.error('Error al actualizar:', error));
     }
-    function cargarTablero() {
-        fetch(`${API_BASE_URL}/api/ibcs/`)
-            .then(response => response.json())
-            .then(data => {
-                columnas.forEach(col => col.innerHTML = '');
-                data.forEach(ibc => {
-                    const card = crearTarjeta(ibc);
-                    if (ibc.estado === 'Averiado') colAveriados.appendChild(card);
-                    else if (ibc.estado === 'En Lavado') colLavadero.appendChild(card);
-                    else if (ibc.estado === 'En Cliente') colClientes.appendChild(card);
-                    else colPlanta.appendChild(card);
-                });
-            })
-            .catch(error => console.error('Error al cargar el tablero:', error));
-    }
+// En tu archivo tablero.js, reemplaza SÓLO esta función:
+function cargarTablero() {
+    fetch(`${API_BASE_URL}/api/ibcs/`)
+        .then(response => response.json())
+        .then(data => {
+            // Primero, limpiamos las columnas como antes
+            columnas.forEach(col => col.innerHTML = '');
+
+            // Luego, distribuimos las tarjetas en sus respectivas columnas
+            data.forEach(ibc => {
+                const card = crearTarjeta(ibc);
+                if (ibc.estado === 'Averiado') colAveriados.appendChild(card);
+                else if (ibc.estado === 'En Lavado') colLavadero.appendChild(card);
+                else if (ibc.estado === 'En Cliente') colClientes.appendChild(card);
+                else colPlanta.appendChild(card);
+            });
+
+            // --- ESTA ES LA LÓGICA NUEVA ---
+            // Ahora, actualizamos los títulos con el contador
+            document.querySelector('#col-planta').previousElementSibling.textContent = `✅ En Planta (Disponibles) (${colPlanta.children.length})`;
+            document.querySelector('#col-lavadero').previousElementSibling.textContent = `💧 En Lavadero (${colLavadero.children.length})`;
+            document.querySelector('#col-clientes').previousElementSibling.textContent = `🚚 En Clientes (${colClientes.children.length})`;
+            document.querySelector('#col-averiados').previousElementSibling.textContent = `❌ Averiados (${colAveriados.children.length})`;
+        })
+        .catch(error => console.error('Error al cargar el tablero:', error));
+}
     function crearTarjeta(ibc) {
     const div = document.createElement('div');
     div.className = 'card';
