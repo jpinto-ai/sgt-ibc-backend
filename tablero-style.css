@@ -30,7 +30,7 @@ header {
 .header-left {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 25px;
 }
 .header-left img { height: 40px; }
 h1 {
