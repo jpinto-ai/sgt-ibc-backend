@@ -95,20 +95,41 @@ function cargarTablero() {
         })
         .catch(error => console.error('Error al cargar el tablero:', error));
 }
-    function crearTarjeta(ibc) {
+// En tu archivo tablero.js, reemplaza SÓLO esta función:
+function crearTarjeta(ibc) {
     const div = document.createElement('div');
     div.className = 'card';
     div.setAttribute('data-id', ibc.id);
+
+    // --- LÓGICA NUEVA: Mostrar observaciones si existen ---
     let clienteInfo = (ibc.estado === 'En Cliente') ? `<p>Cliente: <strong>${ibc.cliente_asignado || 'N/A'}</strong></p>` : '';
+    let observacionesInfo = ibc.observaciones ? `<p style="font-style: italic; color: #555;">Obs: ${ibc.observaciones}</p>` : '';
+
     div.innerHTML = `
         <button class="delete-btn">🗑️</button>
         <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
+        <p>Alias: ${ibc.alias}</p>
         ${clienteInfo}
+        ${observacionesInfo} 
         <div class="card-actions"></div>
     `;
+    
     const deleteButton = div.querySelector('.delete-btn');
     deleteButton.onclick = () => eliminarIbc(ibc.id);
+    
     const actionsContainer = div.querySelector('.card-actions');
+
+    // --- BOTÓN NUEVO: Para editar observaciones ---
+    const btnObservaciones = document.createElement('button');
+    btnObservaciones.textContent = '📝 Editar Observación';
+    btnObservaciones.onclick = () => {
+        const obsActual = ibc.observaciones || ""; // Muestra la observación actual para editar
+        const nuevaObs = prompt("Ingresa las observaciones para este IBC:", obsActual);
+        if (nuevaObs !== null) { // Permite guardar observaciones vacías
+            updateIbcStatus(ibc.id, { observaciones: nuevaObs });
+        }
+    };
+    actionsContainer.appendChild(btnObservaciones);
     // --- BOTÓN NUEVO DE HISTORIAL ---
     const btnHistorial = document.createElement('button');
     btnHistorial.textContent = '📖 Ver Historial';

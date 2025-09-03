@@ -29,6 +29,7 @@ class IBC(Base):
     estado = Column(String, default="Disponible", nullable=False)
     ubicacion = Column(String, default="Planta Bogotá", nullable=False)
     cliente_asignado = Column(String, nullable=True)
+    observaciones = Column(String, nullable=True) # <-- LÍNEA NUEVA
     fecha_ultimo_movimiento = Column(DateTime(timezone=True), server_default=func.now(), onupdate=datetime.datetime.now)
     history = relationship("IBCHistory", backref="ibc", cascade="all, delete-orphan")
 
