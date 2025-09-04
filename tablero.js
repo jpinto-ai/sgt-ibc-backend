@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONEXIÓN AL WEBSOCKET ---
     const ws = new WebSocket("wss://sgt-ibc-api.onrender.com/ws");
-    ws.onmessage = function(event) {
+    ws.onmessage = (event) => {
         if (event.data === "update") {
             console.log("Notificación recibida! Recargando tablero...");
             cargarTablero();
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ws.onclose = () => console.log("WebSocket desconectado.");
     ws.onerror = (event) => console.error("Error en WebSocket:", event);
 
-    // --- REFERENCIAS Y LÓGICA GENERAL ---
+    // --- REFERENCIAS A ELEMENTOS HTML ---
     const API_BASE_URL = 'https://sgt-ibc-api.onrender.com';
     const colPlanta = document.getElementById('col-planta');
     const colLavadero = document.getElementById('col-lavadero');
@@ -19,6 +19,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
     const addIbcButton = document.getElementById('add-ibc-button');
+    const searchInput = document.getElementById('searchInput'); // <-- NUEVA LÍNEA
+
+    // --- LÓGICA DE BÚSQUEDA (NUEVO) ---
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const allCards = document.querySelectorAll('.card');
+
+        allCards.forEach(card => {
+            const idText = card.querySelector('.ibc-id').textContent.toLowerCase();
+            // Busca también en el alias si existe
+            const aliasElement = card.querySelector('p:nth-of-type(2)');
+            const aliasText = aliasElement ? aliasElement.textContent.toLowerCase() : '';
+
+            if (idText.includes(searchTerm) || aliasText.includes(searchTerm)) {
+                card.style.display = 'block'; // Muestra la tarjeta
+            } else {
+                card.style.display = 'none'; // Oculta la tarjeta
+            }
+        });
+    });
 
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
