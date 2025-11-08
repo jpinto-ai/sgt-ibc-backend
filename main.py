@@ -1,6 +1,6 @@
 # archivo: main.py
 from fastapi import FastAPI, Depends, HTTPException, Response, WebSocket, WebSocketDisconnect
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, func
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
@@ -49,6 +49,10 @@ class IBCUpdate(BaseModel):
     ubicacion: Optional[str] = None
     cliente_asignado: Optional[str] = None
     observaciones: Optional[str] = None # <-- ASEGÚRATE DE TENER ESTA LÍNEA
+
+class ClientData(BaseModel):
+    cliente_asignado: str
+    conteo: int
 
 class DashboardData(BaseModel):
     total_ibcs: int
@@ -199,3 +203,17 @@ def get_dashboard_data(db: Session = Depends(get_db)):
         total_clientes=total_clientes,
         total_averiados=total_averiados
     )
+@app.get("/api/dashboard-clients", response_model=List[ClientData])
+def get_dashboard_clients(db: Session = Depends(get_db)):
+    """Devuelve el conteo de IBCs por cliente."""
+    client_data = db.query(
+            IBC.cliente_asignado, 
+            func.count(IBC.id).label("conteo")
+        ).filter(
+            IBC.estado == 'En Cliente'
+        ).group_by(
+            IBC.cliente_asignado
+        ).all()
+    
+    # Convierte la respuesta a un formato JSON adecuado
+    return [{"cliente_asignado": cliente, "conteo": conteo} for cliente, conteo in client_data]

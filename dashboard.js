@@ -75,4 +75,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carga inicial de los datos
     cargarDashboard();
+// --- FUNCIÓN NUEVA PARA EL GRÁFICO DE BARRAS ---
+    function cargarGraficoClientes() {
+        fetch(`${API_BASE_URL}/api/dashboard-clients`)
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.cliente_asignado);
+                const counts = data.map(item => item.conteo);
+
+                const ctx = document.getElementById('clientBarChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'N° de IBCs',
+                            data: counts,
+                            backgroundColor: 'rgba(242, 183, 5, 0.8)', // Amarillo corporativo
+                            borderColor: 'rgba(242, 183, 5, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            })
+            .catch(error => console.error('Error al cargar gráfico de clientes:', error));
+    }
+
+    // --- Carga inicial de datos ---
+    // (Asegúrate de que la carga inicial llame a ambas funciones)
+    cargarDashboard();
+    cargarGraficoClientes(); 
 });
