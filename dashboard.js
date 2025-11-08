@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencias a los elementos KPI
     const kpiTotal = document.getElementById('kpi-total');
     const kpiPlanta = document.getElementById('kpi-planta');
-    const kpiLavadero = document.getElementById('kpi-Lavadero');
     const kpiClientes = document.getElementById('kpi-clientes');
     const kpiAveriados = document.getElementById('kpi-averiados');
+    const kpiLavadero = document.getElementById('kpi-lavadero'); // <-- LÍNEA NUEVA
 
     // Función para cargar los datos del dashboard
     function cargarDashboard() {
@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 1. Actualiza las tarjetas KPI
                 kpiTotal.textContent = data.total_ibcs;
                 kpiPlanta.textContent = data.total_planta;
-                kpiLavadero.textContent = data.total_Lavadero;
                 kpiClientes.textContent = data.total_clientes;
                 kpiAveriados.textContent = data.total_averiados;
+                kpiLavadero.textContent = data.total_lavadero; // <-- LÍNEA NUEVA
 
                 // 2. Dibuja el gráfico de torta
                 const ctx = document.getElementById('estadoPieChart').getContext('2d');
@@ -75,9 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Carga inicial de los datos
-    cargarDashboard();
-// --- FUNCIÓN NUEVA PARA EL GRÁFICO DE BARRAS ---
+    // --- FUNCIÓN PARA EL GRÁFICO DE BARRAS ---
     function cargarGraficoClientes() {
         fetch(`${API_BASE_URL}/api/dashboard-clients`)
             .then(response => response.json())
@@ -108,8 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error al cargar gráfico de clientes:', error));
     }
 
-    // --- Carga inicial de datos ---
-    // (Asegúrate de que la carga inicial llame a ambas funciones)
+    // Carga inicial de los datos
     cargarDashboard();
-    cargarGraficoClientes(); 
+    cargarGraficoClientes();
 });
