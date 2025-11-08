@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencias a los elementos KPI
     const kpiTotal = document.getElementById('kpi-total');
     const kpiPlanta = document.getElementById('kpi-planta');
+    const kpiLavadero = document.getElementById('kpi-Lavadero');
     const kpiClientes = document.getElementById('kpi-clientes');
     const kpiAveriados = document.getElementById('kpi-averiados');
 
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 1. Actualiza las tarjetas KPI
                 kpiTotal.textContent = data.total_ibcs;
                 kpiPlanta.textContent = data.total_planta;
+                kpiLavadero.textContent = data.total_Lavadero;
                 kpiClientes.textContent = data.total_clientes;
                 kpiAveriados.textContent = data.total_averiados;
 
