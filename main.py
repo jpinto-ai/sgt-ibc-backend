@@ -50,6 +50,13 @@ class IBCUpdate(BaseModel):
     cliente_asignado: Optional[str] = None
     observaciones: Optional[str] = None # <-- ASEGÚRATE DE TENER ESTA LÍNEA
 
+class DashboardData(BaseModel):
+    total_ibcs: int
+    total_planta: int
+    total_lavadero: int
+    total_clientes: int
+    total_averiados: int
+
 class IBCHistory_Data(BaseModel):
     id: int
     estado: str
@@ -167,3 +174,28 @@ def exportar_trazabilidad_csv(db: Session = Depends(get_db)):
         headers={"Content-Disposition": f"attachment; filename=trazabilidad_ibc_{datetime.now().strftime('%Y%m%d')}.csv"}
     )
     return response
+# Pega este código al final de tu archivo main.py
+@app.get("/api/dashboard-data", 
+    response_model=DashboardData, 
+    summary="Obtener datos resumidos para el Dashboard"
+)
+def get_dashboard_data(db: Session = Depends(get_db)):
+    """
+    Calcula y devuelve los KPIs principales de la flota de IBCs.
+    """
+    todos_los_ibcs = db.query(IBC).all()
+    
+    # Hacemos los cálculos en Python para ser eficientes
+    total_ibcs = len(todos_los_ibcs)
+    total_planta = len([ibc for ibc in todos_los_ibcs if ibc.estado == 'Disponible'])
+    total_lavadero = len([ibc for ibc in todos_los_ibcs if ibc.estado == 'En Lavado'])
+    total_clientes = len([ibc for ibc in todos_los_ibcs if ibc.estado == 'En Cliente'])
+    total_averiados = len([ibc for ibc in todos_los_ibcs if ibc.estado == 'Averiado'])
+    
+    return DashboardData(
+        total_ibcs=total_ibcs,
+        total_planta=total_planta,
+        total_lavadero=total_lavadero,
+        total_clientes=total_clientes,
+        total_averiados=total_averiados
+    )

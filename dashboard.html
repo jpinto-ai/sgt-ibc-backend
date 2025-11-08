@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SGT-IBC</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="tablero-style.css">
+    <style>
+        /* Estilos específicos para el dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .kpi-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .kpi-card h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #5e6c84;
+        }
+        .kpi-card .kpi-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--color-verde-oscuro);
+        }
+        .chart-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            grid-column: 1 / -1; /* Ocupa todo el ancho */
+            max-width: 500px; /* Ancho máximo para el gráfico de torta */
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="logo-alianza-team.svg" alt="Logo Alianza Team"> 
+            <h1>Dashboard de Control</h1>
+        </div>
+        <div class="header-right">
+            <a href="index.html" class="header-button export-button">Volver al Tablero</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-grid">
+            <div class="kpi-card">
+                <h3>Total de IBCs</h3>
+                <p class="kpi-number" id="kpi-total">0</p>
+            </div>
+            <div class="kpi-card">
+                <h3>En Planta</h3>
+                <p class="kpi-number" id="kpi-planta">0</p>
+            </div>
+            <div class="kpi-card">
+                <h3>En Clientes</h3>
+                <p class="kpi-number" id="kpi-clientes">0</p>
+            </div>
+            <div class="kpi-card">
+                <h3>Averiados</h3>
+                <p class="kpi-number" id="kpi-averiados">0</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Distribución de Estados</h2>
+            <canvas id="estadoPieChart"></canvas>
+            
+        </div>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

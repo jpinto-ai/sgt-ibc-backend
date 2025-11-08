@@ -19,49 +19,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const colAveriados = document.getElementById('col-averiados');
     const columnas = [colPlanta, colLavadero, colClientes, colAveriados];
     const addIbcButton = document.getElementById('add-ibc-button');
-    const searchInput = document.getElementById('searchInput'); // <-- NUEVA LÍNEA
+    const searchInput = document.getElementById('searchInput');
 
-    // --- LÓGICA DE BÚSQUEDA (NUEVO) ---
+    // --- LÓGICA DE BÚSQUEDA (MODIFICADA) ---
     searchInput.addEventListener('input', () => {
         const searchTerm = searchInput.value.toLowerCase();
         const allCards = document.querySelectorAll('.card');
 
+        // 1. Aplica el filtro (Oculta o muestra tarjetas)
         allCards.forEach(card => {
             const idText = card.querySelector('.ibc-id').textContent.toLowerCase();
-            // Busca también en el alias si existe
             const aliasElement = card.querySelector('p:nth-of-type(2)');
             const aliasText = aliasElement ? aliasElement.textContent.toLowerCase() : '';
+            const clienteElement = card.querySelector('p strong');
+            const clienteText = clienteElement ? clienteElement.textContent.toLowerCase() : '';
 
-            if (idText.includes(searchTerm) || aliasText.includes(searchTerm)) {
-                card.style.display = 'block'; // Muestra la tarjeta
+            if (idText.includes(searchTerm) || aliasText.includes(searchTerm) || clienteText.includes(searchTerm)) {
+                card.style.display = 'block';
             } else {
-                card.style.display = 'none'; // Oculta la tarjeta
+                card.style.display = 'none';
             }
         });
-    });
 
+        // 2. Vuelve a calcular los contadores (SOLO de tarjetas visibles)
+        actualizarContadores();
+    });
+    // --- FIN DE LÓGICA DE BÚSQUEDA ---
+
+    // --- MANEJADORES DE EVENTOS ---
     addIbcButton.addEventListener('click', () => {
         const alias = prompt("Ingresa el alias para el nuevo IBC:");
         if (alias) crearNuevoIbc(alias);
     });
 
-    // ... (Las funciones crearNuevoIbc, eliminarIbc, updateIbcStatus y cargarTablero no cambian) ...
+    // --- FUNCIONES DE API ---
     function crearNuevoIbc(alias) {
         fetch(`${API_BASE_URL}/api/ibcs/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ alias: alias }) })
         .then(response => { if (!response.ok) throw new Error('Error al crear'); return response.json(); })
-        .then(nuevoIbc => cargarTablero()).catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error));
     }
+    
     function eliminarIbc(ibcId) {
         if (!confirm(`¿Estás seguro de que quieres eliminar el IBC-${String(ibcId).padStart(3, '0')}?`)) return;
         fetch(`${API_BASE_URL}/api/ibcs/${ibcId}`, { method: 'DELETE' })
-        .then(response => { if (!response.ok) throw new Error('Error al eliminar'); cargarTablero(); })
         .catch(error => console.error('Error:', error));
     }
+
     function updateIbcStatus(ibcId, updateData) {
         fetch(`${API_BASE_URL}/api/ibcs/${ibcId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updateData) })
         .then(response => { if (!response.ok) throw new Error('Falló la actualización'); return response.json(); })
-        .then(data => cargarTablero()).catch(error => console.error('Error al actualizar:', error));
+        .catch(error => console.error('Error al actualizar:', error));
     }
+
     function cargarTablero() {
         fetch(`${API_BASE_URL}/api/ibcs/`)
             .then(response => response.json())
@@ -74,15 +83,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (ibc.estado === 'En Cliente') colClientes.appendChild(card);
                     else colPlanta.appendChild(card);
                 });
-                document.querySelector('#col-planta').previousElementSibling.textContent = `✅ En Planta (${colPlanta.children.length})`;
-                document.querySelector('#col-lavadero').previousElementSibling.textContent = `💧 En Lavadero (${colLavadero.children.length})`;
-                document.querySelector('#col-clientes').previousElementSibling.textContent = `🚚 En Clientes (${colClientes.children.length})`;
-                document.querySelector('#col-averiados').previousElementSibling.textContent = `❌ Averiados (${colAveriados.children.length})`;
+                
+                // --- MODIFICACIÓN: Limpia el filtro cuando el tablero se recarga ---
+                searchInput.value = ''; 
+                // Actualiza los contadores totales
+                actualizarContadores();
             })
             .catch(error => console.error('Error al cargar el tablero:', error));
     }
 
-    // --- FUNCIÓN crearTarjeta RESTAURADA Y CON EL NUEVO BOTÓN DE OBSERVACIONES ---
+    // --- FUNCIÓN NUEVA: Para actualizar los contadores ---
+    // Esta función ahora cuenta solo las tarjetas que NO están ocultas
+    function actualizarContadores() {
+        const plantaVisibles = colPlanta.querySelectorAll('.card:not([style*="display: none"])').length;
+        const lavaderoVisibles = colLavadero.querySelectorAll('.card:not([style*="display: none"])').length;
+        const clientesVisibles = colClientes.querySelectorAll('.card:not([style*="display: none"])').length;
+        const averiadosVisibles = colAveriados.querySelectorAll('.card:not([style*="display: none"])').length;
+
+        document.querySelector('#col-planta').previousElementSibling.textContent = `✅ En Planta (${plantaVisibles})`;
+        document.querySelector('#col-lavadero').previousElementSibling.textContent = `💧 En Lavadero (${lavaderoVisibles})`;
+        document.querySelector('#col-clientes').previousElementSibling.textContent = `🚚 En Clientes (${clientesVisibles})`;
+        document.querySelector('#col-averiados').previousElementSibling.textContent = `❌ Averiados (${averiadosVisibles})`;
+    }
+
+    // --- FUNCIÓN crearTarjeta (CON LÓGICA DE OBSERVACIONES) ---
     function crearTarjeta(ibc) {
         const div = document.createElement('div');
         div.className = 'card';
@@ -95,25 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="delete-btn">🗑️</button>
             <button class="obs-btn">📝</button>
             <p class="ibc-id">IBC-${String(ibc.id).padStart(3, '0')}</p>
-            <p>Alias: ${ibc.alias}</p> 
             ${clienteInfo}
             ${observacionesInfo}
             <div class="card-actions"></div>
         `;
 
-        // Lógica para botones de la esquina
         div.querySelector('.delete-btn').onclick = () => eliminarIbc(ibc.id);
         div.querySelector('.obs-btn').onclick = () => {
             const obsActual = ibc.observaciones || "";
             const nuevaObs = prompt("Ingresa las observaciones para este IBC:", obsActual);
-            if (nuevaObs !== null) {
-                updateIbcStatus(ibc.id, { observaciones: nuevaObs });
-            }
+            if (nuevaObs !== null) updateIbcStatus(ibc.id, { observaciones: nuevaObs });
         };
-
-        // Lógica para la lista de botones de acción principal
-        const actionsContainer = div.querySelector('.card-actions');
         
+        const actionsContainer = div.querySelector('.card-actions');
         const btnHistorial = document.createElement('button');
         btnHistorial.textContent = '📖 Ver Historial';
         btnHistorial.onclick = () => { window.location.href = `historial.html?id=${ibc.id}`; };
@@ -158,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
             btnReparado.onclick = () => updateIbcStatus(ibc.id, { estado: 'Disponible', ubicacion: 'Planta Bogotá' });
             actionsContainer.appendChild(btnReparado);
         }
-        
         return div;
     }
-
+    
+    // Carga inicial del tablero
     cargarTablero();
 });
