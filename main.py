@@ -1,6 +1,7 @@
 # archivo: main.py
 from fastapi import FastAPI, Depends, HTTPException, Response, WebSocket, WebSocketDisconnect
-from sqlalchemy.orm import Session, func
+from sqlalchemy.orm import Session
+from sqlalchemy import func
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
