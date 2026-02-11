@@ -82,6 +82,20 @@ class IBC_Data(BaseModel):
     class Config:
         orm_mode = True
 
+class IBC(BaseModel):
+    id: int
+    identificación: Optional[int] = None
+    alias: Optional[str] = "-"  # Si en Supabase es NULL, aquí será "-"
+    estado: Optional[str] = "En Planta"
+    ubicacion: Optional[str] = "-"
+    centro: Optional[str] = "Planta Bogotá"
+    cliente_asignado: Optional[str] = "-"
+    observaciones: Optional[str] = "-"
+    fecha_ultimo_movimiento: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 # --- Función de Base de Datos ---
 def get_db():
     db = SessionLocal()
