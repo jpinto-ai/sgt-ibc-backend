@@ -82,17 +82,14 @@ class IBC_Data(BaseModel):
     class Config:
         orm_mode = True
 
-class IBC(BaseModel):
+class IBC_Data(BaseModel):
     id: int
-    identificación: Optional[int] = None
-    alias: Optional[str] = "-"  # Si en Supabase es NULL, aquí será "-"
+    alias: Optional[str] = "-"
     estado: Optional[str] = "En Planta"
     ubicacion: Optional[str] = "-"
     centro: Optional[str] = "Planta Bogotá"
-    cliente_asignado: Optional[str] = "-"
-    observaciones: Optional[str] = "-"
-    fecha_ultimo_movimiento: Optional[str] = None
-
+    cliente_asignado: Optional[str] = "-" # Esto arregla el error de la imagen b8e22d
+    observaciones: Optional[str] = "-"    # Esto arregla el error de la imagen b8e22d
     class Config:
         from_attributes = True
 
@@ -118,9 +115,11 @@ async def websocket_endpoint(websocket: WebSocket):
 def read_root():
     return {"Proyecto": "SGT-IBC API", "Status": "Operacional"}
 
-@app.get("/api/ibcs/", response_model=List[IBC_Data])
+@app.get("/api/ibcs/", response_model=List[IBC_Data_With_History]) # Necesitarás un modelo nuevo con historial
 def obtener_todos_los_ibcs(db: Session = Depends(get_db)):
-    return db.query(IBC).all()
+    ibcs = db.query(IBC).all()
+    # Aquí es donde Python debe unir los puntos por ti
+    return ibcs
 
 @app.get("/api/ibcs/{ibc_id}", response_model=IBC_Data)
 def obtener_ibc(ibc_id: int, db: Session = Depends(get_db)):
